@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>化學元素雙向挑戰 | Table 4-3 英打測驗</title>
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.28);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --cyan: #06b6d4;
+      --purple: #8b5cf6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 660px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .badge-tag {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.18);
+      color: #c7d2fe;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      font-size: 0.725rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .stats-group {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    .stat-pill {
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--card-border);
+      background: #030712;
+      font-weight: 600;
+    }
+
+    .stat-score { color: #818cf8; border-color: rgba(99, 102, 241, 0.35); }
+    .stat-streak { color: #34d399; border-color: rgba(16, 185, 129, 0.35); }
+
+    .mode-bar {
+      width: 100%;
+      max-width: 660px;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      background: #111827;
+      border: 1px solid var(--card-border);
+      color: #9ca3af;
+      padding: 0.5rem 0.9rem;
+      border-radius: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover {
+      background: #1e293b;
+      color: #f3f4f6;
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border-color: #818cf8;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    main {
+      width: 100%;
+      max-width: 660px;
+      margin: auto 0;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: #1f2937;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #06b6d4);
+      transition: width 0.3s ease;
+      border-radius: 9999px;
+    }
+
+    .card-meta {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+    }
+
+    .type-pill {
+      font-size: 0.725rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.5rem;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+    }
+
+    .type-pill.symbol-mode {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border-color: rgba(139, 92, 246, 0.35);
+    }
+
+    .prompt-box {
+      min-height: 115px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0.5rem 0;
+    }
+
+    .prompt-display {
+      font-weight: 800;
+      color: #ffffff;
+      user-select: none;
+      line-height: 1.15;
+      text-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    /* Dynamic prompt font styling depending on mode */
+    .prompt-display.symbol-style {
+      font-size: 4.5rem;
+      font-family: "Fira Code", "Courier New", monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .prompt-display.name-style {
+      font-size: 2.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hint-label {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .hint-val {
+      color: #f3f4f6;
+      font-weight: 700;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      background: #030712;
+      border: 2px solid #374151;
+      border-radius: 1rem;
+      color: #fff;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    /* Two sizing variants for input box */
+    .input-box.wide {
+      max-width: 440px;
+      font-size: 1.25rem;
+    }
+
+    .input-box.short {
+      max-width: 240px;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: capitalize;
+    }
+
+    .input-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    .input-box.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+      color: #a7f3d0;
+    }
+
+    .input-box.wrong {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+      color: #fecaca;
+    }
+
+    .feedback-area {
+      min-height: 54px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .feedback-text {
+      font-size: 0.925rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .feedback-detail {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      font-family: monospace;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: #d1d5db;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.55rem 0.95rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .btn:hover {
+      background: #374151;
+      color: #fff;
+    }
+
+    kbd {
+      background: #030712;
+      border: 1px solid #374151;
+      border-radius: 4px;
+      padding: 0.15rem 0.35rem;
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: #9ca3af;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 1.5rem;
+      max-width: 440px;
+      width: 100%;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    }
+
+    .score-summary {
+      background: #030712;
+      border: 1px solid #1f2937;
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.85rem;
+      font-family: monospace;
+      text-align: left;
+      line-height: 2;
+    }
+
+    .score-summary div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer {
+      width: 100%;
+      max-width: 660px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+      padding: 1rem 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <span class="badge-tag">Table 4-3 三合一雙向挑戰</span>
+      <h1><span>🧪</span> 化學元素雙向英打挑戰</h1>
+      <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 0.25rem;">
+        收錄 44 個常見元素，支援雙向打字與混合出題，隨機打亂練習。
+      </p>
+    </div>
+    <div class="stats-group">
+      <span class="stat-pill stat-score" id="score-counter">得分: 0 / 0</span>
+      <span class="stat-pill stat-streak" id="streak-counter">連對: 0 🔥</span>
+    </div>
+  </header>
+
+  <!-- Mode Selector Buttons -->
+  <div class="mode-bar">
+    <button onclick="changeMode('symbol_to_name')" id="mode-s2n" class="mode-btn active">
+      <span>🔤 符號 ➔ 英文全名</span>
+    </button>
+    <button onclick="changeMode('name_to_symbol')" id="mode-n2s" class="mode-btn">
+      <span>🎯 英文全名 ➔ 符號</span>
+    </button>
+    <button onclick="changeMode('mixed')" id="mode-mixed" class="mode-btn">
+      <span>🔀 雙向混合模式</span>
+    </button>
+  </div>
+
+  <main>
+    <div class="card">
+      <div class="progress-track">
+        <div id="progress-bar" class="progress-fill"></div>
+      </div>
+
+      <div class="card-meta">
+        <span id="question-type-badge" class="type-pill">題目：符號 ➔ 英文全名</span>
+        <span id="card-counter">1 / 44</span>
+      </div>
+
+      <!-- Question Display (Symbol or Name) -->
+      <div class="prompt-box">
+        <div class="prompt-display symbol-style" id="prompt-display">Al</div>
+      </div>
+
+      <div class="hint-label" id="hint-container">
+        中文提示：<span class="hint-val" id="zh-text">鋁</span>
+      </div>
+
+      <!-- User input container -->
+      <div style="width: 100%; display: flex; justify-content: center;">
+        <input 
+          type="text" 
+          id="quiz-input" 
+          autocomplete="off" 
+          autocorrect="off" 
+          autocapitalize="off" 
+          spellcheck="false"
+          placeholder="輸入英文全名後按 Enter" 
+          class="input-box wide"
+        />
+      </div>
+
+      <!-- Answer feedback message -->
+      <div class="feedback-area">
+        <div id="feedback-msg" class="feedback-text"></div>
+        <div id="correct-reveal" class="feedback-detail"></div>
+      </div>
+
+      <!-- Control actions -->
+      <div class="controls">
+        <button onclick="skipCard()" class="btn">
+          <span>跳過</span> <kbd>Ctrl+Space</kbd>
+        </button>
+        <button onclick="shuffleAndRestart()" class="btn">
+          <span>重新打亂</span> 🔀
+        </button>
+        <button onclick="toggleChineseHint()" id="toggle-hint-btn" class="btn">
+          <span>隱藏中文提示</span> 👁️
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <div id="finish-modal" class="modal-backdrop">
+    <div class="modal">
+      <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+      <h2 style="font-size: 1.35rem; color: #fff; margin-bottom: 0.4rem;">44 個元素挑戰完成！</h2>
+      <p style="font-size: 0.85rem; color: #9ca3af;" id="modal-mode-desc">恭喜完成本次元素測驗！</p>
+
+      <div class="score-summary">
+        <div><span>測驗模式：</span><span style="color:#818cf8;" id="final-mode-name">符號 ➔ 英文全名</span></div>
+        <div><span>總題數：</span><span style="color:#fff;" id="final-total">44</span></div>
+        <div><span>答對數：</span><span style="color:#34d399;" id="final-correct">0</span></div>
+        <div><span>跳過 / 答錯：</span><span style="color:#f87171;" id="final-wrong">0</span></div>
+        <div style="border-top: 1px solid #1f2937; padding-top: 0.4rem; margin-top: 0.3rem;">
+          <span style="color:#818cf8; font-weight:700;">整體準確率：</span>
+          <span style="color:#818cf8; font-weight:700;" id="final-acc">0%</span>
+        </div>
+      </div>
+
+      <button onclick="restartPractice()" class="btn" style="width: 100%; justify-content: center; padding: 0.8rem; background: var(--accent); color: #fff; font-weight: 600; font-size: 0.9rem;">
+        重新隨機打亂並練習
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    💡 提示：輸入不區分大小寫。按下 <kbd>Enter</kbd> 即可送出並自動前往下一題，可隨時在上方切換模式。
+  </footer>
+
+  <script>
+    // 44 Elements from Table 4-3
+    const ELEMENTS = [
+      { name: 'Aluminum', symbol: 'Al', zh: '鋁', aliases: ['aluminium'] },
+      { name: 'Antimony', symbol: 'Sb', zh: '銻', origin: 'stibium' },
+      { name: 'Argon', symbol: 'Ar', zh: '氬' },
+      { name: 'Arsenic', symbol: 'As', zh: '砷' },
+      { name: 'Barium', symbol: 'Ba', zh: '鋇' },
+      { name: 'Bismuth', symbol: 'Bi', zh: '鉍' },
+      { name: 'Boron', symbol: 'B', zh: '硼' },
+      { name: 'Bromine', symbol: 'Br', zh: '溴' },
+      { name: 'Cadmium', symbol: 'Cd', zh: '鎘' },
+      { name: 'Calcium', symbol: 'Ca', zh: '鈣' },
+      { name: 'Carbon', symbol: 'C', zh: '碳' },
+      { name: 'Chlorine', symbol: 'Cl', zh: '氯' },
+      { name: 'Chromium', symbol: 'Cr', zh: '鉻' },
+      { name: 'Cobalt', symbol: 'Co', zh: '鈷' },
+      { name: 'Copper', symbol: 'Cu', zh: '銅', origin: 'cuprum' },
+      { name: 'Fluorine', symbol: 'F', zh: '氟' },
+      { name: 'Gold', symbol: 'Au', zh: '金', origin: 'aurum' },
+      { name: 'Helium', symbol: 'He', zh: '氦' },
+      { name: 'Hydrogen', symbol: 'H', zh: '氫' },
+      { name: 'Iodine', symbol: 'I', zh: '碘' },
+      { name: 'Iron', symbol: 'Fe', zh: '鐵', origin: 'ferrum' },
+      { name: 'Lead', symbol: 'Pb', zh: '鉛', origin: 'plumbum' },
+      { name: 'Lithium', symbol: 'Li', zh: '鋰' },
+      { name: 'Magnesium', symbol: 'Mg', zh: '鎂' },
+      { name: 'Manganese', symbol: 'Mn', zh: '錳' },
+      { name: 'Mercury', symbol: 'Hg', zh: '汞', origin: 'hydrargyrum' },
+      { name: 'Neon', symbol: 'Ne', zh: '氖' },
+      { name: 'Nickel', symbol: 'Ni', zh: '鎳' },
+      { name: 'Nitrogen', symbol: 'N', zh: '氮' },
+      { name: 'Oxygen', symbol: 'O', zh: '氧' },
+      { name: 'Phosphorus', symbol: 'P', zh: '磷' },
+      { name: 'Platinum', symbol: 'Pt', zh: '鉑' },
+      { name: 'Potassium', symbol: 'K', zh: '鉀', origin: 'kalium' },
+      { name: 'Radium', symbol: 'Ra', zh: '鐳' },
+      { name: 'Silicon', symbol: 'Si', zh: '矽' },
+      { name: 'Silver', symbol: 'Ag', zh: '銀', origin: 'argentum' },
+      { name: 'Sodium', symbol: 'Na', zh: '鈉', origin: 'natrium' },
+      { name: 'Strontium', symbol: 'Sr', zh: '鍶' },
+      { name: 'Sulfur', symbol: 'S', zh: '硫' },
+      { name: 'Tin', symbol: 'Sn', zh: '錫', origin: 'stannum' },
+      { name: 'Titanium', symbol: 'Ti', zh: '鈦' },
+      { name: 'Tungsten', symbol: 'W', zh: '鎢', origin: 'wolfram' },
+      { name: 'Uranium', symbol: 'U', zh: '鈾' },
+      { name: 'Zinc', symbol: 'Zn', zh: '鋅' }
+    ];
+
+    // Application state
+    let currentMode = 'symbol_to_name'; // 'symbol_to_name' | 'name_to_symbol' | 'mixed'
+    let deck = [];
+    let currentIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let answeredCount = 0;
+    let wrongCount = 0;
+    let showHint = true;
+    let isTransitioning = false;
+
+    // DOM references
+    const promptDisplay = document.getElementById('prompt-display');
+    const zhText = document.getElementById('zh-text');
+    const questionTypeBadge = document.getElementById('question-type-badge');
+    const cardCounter = document.getElementById('card-counter');
+    const progressBar = document.getElementById('progress-bar');
+    const quizInput = document.getElementById('quiz-input');
+    const feedbackMsg = document.getElementById('feedback-msg');
+    const correctReveal = document.getElementById('correct-reveal');
+    const scoreCounter = document.getElementById('score-counter');
+    const streakCounter = document.getElementById('streak-counter');
+    const finishModal = document.getElementById('finish-modal');
+    const toggleHintBtn = document.getElementById('toggle-hint-btn');
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function changeMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      if (mode === 'symbol_to_name') document.getElementById('mode-s2n').classList.add('active');
+      if (mode === 'name_to_symbol') document.getElementById('mode-n2s').classList.add('active');
+      if (mode === 'mixed') document.getElementById('mode-mixed').classList.add('active');
+
+      initPractice();
+    }
+
+    function initPractice() {
+      // Build deck with directional question type
+      const shuffledElements = shuffle(ELEMENTS);
+      deck = shuffledElements.map(el => {
+        let qType = currentMode;
+        if (currentMode === 'mixed') {
+          qType = Math.random() < 0.5 ? 'symbol_to_name' : 'name_to_symbol';
+        }
+        return {
+          ...el,
+          direction: qType // 'symbol_to_name' or 'name_to_symbol'
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      streak = 0;
+      answeredCount = 0;
+      wrongCount = 0;
+      updateHeaderStats();
+      renderCurrentCard();
+    }
+
+    function renderCurrentCard() {
+      if (currentIndex >= deck.length) {
+        showCompletionModal();
+        return;
+      }
+
+      isTransitioning = false;
+      const current = deck[currentIndex];
+
+      zhText.textContent = current.zh;
+      cardCounter.textContent = `${currentIndex + 1} / ${deck.length}`;
+
+      const progressPercent = (currentIndex / deck.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      quizInput.value = '';
+      quizInput.className = 'input-box';
+      feedbackMsg.style.opacity = '0';
+      correctReveal.style.opacity = '0';
+
+      if (current.direction === 'symbol_to_name') {
+        // Prompt is Chemical Symbol, User types English Full Name
+        questionTypeBadge.textContent = '● 符號 ➔ 英文全名';
+        questionTypeBadge.className = 'type-pill';
+        promptDisplay.textContent = current.symbol;
+        promptDisplay.className = 'prompt-display symbol-style';
+        quizInput.placeholder = '輸入英文全名後按 Enter';
+        quizInput.maxLength = 30;
+        quizInput.classList.add('wide');
+      } else {
+        // Prompt is English Full Name, User types Chemical Symbol
+        questionTypeBadge.textContent = '● 英文全名 ➔ 符號';
+        questionTypeBadge.className = 'type-pill symbol-mode';
+        promptDisplay.textContent = current.name;
+        promptDisplay.className = 'prompt-display name-style';
+        quizInput.placeholder = '符號 (如: Al, Fe)';
+        quizInput.maxLength = 2;
+        quizInput.classList.add('short');
+      }
+
+      quizInput.focus();
+    }
+
+    function checkAnswer() {
+      if (isTransitioning || currentIndex >= deck.length) return;
+
+      const userRaw = quizInput.value.trim().toLowerCase();
+      if (!userRaw) return;
+
+      const current = deck[currentIndex];
+      let isCorrect = false;
+      const originNote = current.origin ? `（源自 ${current.origin}）` : '';
+
+      if (current.direction === 'symbol_to_name') {
+        const correctAns = current.name.toLowerCase();
+        const validAnswers = [correctAns];
+        if (current.aliases) {
+          current.aliases.forEach(a => validAnswers.push(a.toLowerCase()));
+        }
+        isCorrect = validAnswers.includes(userRaw);
+      } else {
+        isCorrect = userRaw === current.symbol.toLowerCase();
+      }
+
+      isTransitioning = true;
+      answeredCount++;
+
+      if (isCorrect) {
+        score++;
+        streak++;
+        updateHeaderStats();
+
+        quizInput.className = current.direction === 'symbol_to_name' 
+          ? 'input-box wide correct' 
+          : 'input-box short correct';
+        
+        // Auto format standard capitalization on success
+        if (current.direction === 'name_to_symbol') {
+          quizInput.value = current.symbol;
+        }
+
+        feedbackMsg.textContent = '✓ 完全正確！';
+        feedbackMsg.style.color = '#34d399';
+        feedbackMsg.style.opacity = '1';
+        correctReveal.textContent = `${current.name} = ${current.symbol} ${originNote}`;
+        correctReveal.style.opacity = '1';
+
+        setTimeout(() => {
+          currentIndex++;
+          renderCurrentCard();
+        }, 600);
+      } else {
+        streak = 0;
+        wrongCount++;
+        updateHeaderStats();
+
+        quizInput.className = current.direction === 'symbol_to_name' 
+          ? 'input-box wide wrong' 
+          : 'input-box short wrong';
+
+        feedbackMsg.textContent = '✕ 答案有誤';
+        feedbackMsg.style.color = '#f87171';
+        feedbackMsg.style.opacity = '1';
+
+        const answerText = current.direction === 'symbol_to_name' ? current.name : current.symbol;
+        correctReveal.textContent = `正解為：${answerText} ${originNote}`;
+        correctReveal.style.color = '#fcd34d';
+        correctReveal.style.opacity = '1';
+
+        setTimeout(() => {
+          currentIndex++;
+          renderCurrentCard();
+        }, 1350);
+      }
+    }
+
+    function skipCard() {
+      if (isTransitioning || currentIndex >= deck.length) return;
+      const current = deck[currentIndex];
+      wrongCount++;
+      answeredCount++;
+      streak = 0;
+      updateHeaderStats();
+
+      const originNote = current.origin ? `（源自 ${current.origin}）` : '';
+      const answerText = current.direction === 'symbol_to_name' ? current.name : current.symbol;
+
+      feedbackMsg.textContent = '已跳過此題';
+      feedbackMsg.style.color = '#fbbf24';
+      feedbackMsg.style.opacity = '1';
+      correctReveal.textContent = `正解為：${answerText} ${originNote}`;
+      correctReveal.style.color = '#fde68a';
+      correctReveal.style.opacity = '1';
+
+      isTransitioning = true;
+      setTimeout(() => {
+        currentIndex++;
+        renderCurrentCard();
+      }, 900);
+    }
+
+    function shuffleAndRestart() {
+      initPractice();
+      feedbackMsg.textContent = '題庫已重新隨機打亂！';
+      feedbackMsg.style.color = '#38bdf8';
+      feedbackMsg.style.opacity = '1';
+      setTimeout(() => {
+        if (!isTransitioning) feedbackMsg.style.opacity = '0';
+      }, 1000);
+    }
+
+    function toggleChineseHint() {
+      showHint = !showHint;
+      zhText.style.display = showHint ? 'inline' : 'none';
+      toggleHintBtn.innerHTML = showHint 
+        ? '<span>隱藏中文提示</span> 👁️' 
+        : '<span>顯示中文提示</span> 🙈';
+      quizInput.focus();
+    }
+
+    function updateHeaderStats() {
+      scoreCounter.textContent = `得分: ${score} / ${answeredCount}`;
+      streakCounter.textContent = `連對: ${streak} 🔥`;
+    }
+
+    function showCompletionModal() {
+      const total = deck.length;
+      const acc = total > 0 ? Math.round((score / total) * 100) : 0;
+      
+      let modeName = '🔤 符號 ➔ 英文全名';
+      if (currentMode === 'name_to_symbol') modeName = '🎯 英文全名 ➔ 符號';
+      if (currentMode === 'mixed') modeName = '🔀 雙向混合模式';
+
+      document.getElementById('final-mode-name').textContent = modeName;
+      document.getElementById('final-total').textContent = total;
+      document.getElementById('final-correct').textContent = score;
+      document.getElementById('final-wrong').textContent = wrongCount;
+      document.getElementById('final-acc').textContent = `${acc}%`;
+      finishModal.classList.add('show');
+    }
+
+    function restartPractice() {
+      finishModal.classList.remove('show');
+      initPractice();
+    }
+
+    quizInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkAnswer();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.code === 'Space') {
+        e.preventDefault();
+        skipCard();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initPractice();
+    });
+  </script>
+</body>
+</html>
+
